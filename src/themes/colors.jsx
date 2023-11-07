@@ -9,6 +9,8 @@ export const colors = {
   Accent: "#E5BAAB",
   Modal: "rgba(0, 0, 0, 0.5)",
   Gray: "#585555",
+  GrayBlur: "#rgba(88, 84, 84, 0.2)",
+  GrayWhite: "#DEDDDD",
   LightGrey: "#F0F0F0",
   Success: "#DAFEDF",
   SuccessSolid: "#7EA383",
