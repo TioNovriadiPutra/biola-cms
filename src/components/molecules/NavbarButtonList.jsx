@@ -1,22 +1,42 @@
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { FlatList, Pressable, StyleSheet, Text } from "react-native";
+import React, { useEffect } from "react";
 import NavbarBlock from "@components/atoms/NavbarBlock";
 import { fonts } from "@themes/fonts";
 import { colors } from "@themes/colors";
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
 const NavbarButtonList = ({ listItem, activeScreen, setActiveScreen }) => {
+  const inAnim = useSharedValue(0);
+
   const handlePress = (index) => {
     setActiveScreen(index);
   };
 
+  const handleIn = () => {
+    inAnim.value = withTiming(1, { duration: 1000 });
+  };
+
+  const navbarAnimatedStyle = useAnimatedStyle(() => {
+    const translateY = interpolate(inAnim.value, [0, 1], [-50, 0]);
+
+    return {
+      transform: [{ translateY }],
+      opacity: inAnim.value,
+    };
+  });
+
+  useEffect(() => {
+    handleIn();
+  }, []);
+
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, navbarAnimatedStyle]}>
       <FlatList
         data={listItem}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.list}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(_, index) => index.toString()}
         renderItem={({ item, index }) => (
           <Pressable style={styles.button} onPress={() => handlePress(index)}>
             <Text
@@ -34,7 +54,7 @@ const NavbarButtonList = ({ listItem, activeScreen, setActiveScreen }) => {
       />
 
       <NavbarBlock activeScreen={activeScreen} />
-    </View>
+    </Animated.View>
   );
 };
 

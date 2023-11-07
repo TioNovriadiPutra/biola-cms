@@ -5,7 +5,7 @@ import { colors } from "@themes/colors";
 import { fonts } from "@themes/fonts";
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
-const LoginTextInput = ({ name, defaultValue, control, placeholder, icon, index, password }) => {
+const LoginTextInput = ({ name, defaultValue, control, placeholder, icon, index, password, refInput, onSubmit }) => {
   const { field } = useController({
     name,
     defaultValue,
@@ -36,7 +36,16 @@ const LoginTextInput = ({ name, defaultValue, control, placeholder, icon, index,
   return (
     <Animated.View style={[styles.container, inputAnimatedStyle]}>
       {icon}
-      <TextInput value={field.value} placeholder={placeholder} placeholderTextColor={colors.Modal} onChangeText={field.onChange} style={styles.input} secureTextEntry={password} />
+      <TextInput
+        ref={refInput}
+        value={field.value}
+        placeholder={placeholder}
+        placeholderTextColor={colors.Modal}
+        onChangeText={field.onChange}
+        style={styles.input}
+        secureTextEntry={password}
+        onSubmitEditing={onSubmit}
+      />
     </Animated.View>
   );
 };

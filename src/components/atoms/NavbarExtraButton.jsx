@@ -15,14 +15,7 @@ const NavbarExtraButton = ({ label, color = colors.Primary, withBorder }) => {
         },
       ]}
     >
-      <Text
-        style={[
-          styles.label,
-          { color: color === colors.Primary ? colors.White : colors.Gray },
-        ]}
-      >
-        {label}
-      </Text>
+      <Text style={[styles.label, { color: color === colors.Primary ? colors.White : colors.Gray }]}>{label}</Text>
     </Pressable>
   );
 };
@@ -34,6 +27,7 @@ const styles = StyleSheet.create({
     width: 115,
     alignItems: "center",
     borderRadius: 8,
+    paddingVertical: 5,
   },
   label: {
     fontFamily: fonts.PopSemiBold,
