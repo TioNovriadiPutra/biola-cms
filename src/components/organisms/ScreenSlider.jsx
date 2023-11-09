@@ -2,7 +2,12 @@ import { FlatList } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import MainContainer from "@containers/MainContainer";
 import DataScreen from "@components/molecules/DataScreen";
-import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 const ScreenSlider = ({ screens, type, activeScreen }) => {
   const [sliderLayout, setSliderLayout] = useState(null);
@@ -51,7 +56,16 @@ const ScreenSlider = ({ screens, type, activeScreen }) => {
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => {
-            return type === "data" ? <DataScreen parentWidth={sliderLayout} dataHead={item.head} dataItem={item.data} /> : null;
+            return type === "data" ? (
+              <DataScreen
+                parentWidth={sliderLayout}
+                dataHead={item.head}
+                dataItem={item.data}
+                fullData={item.fullData}
+                detailFunc={item.detail}
+                detailScreen={item.detailScreen}
+              />
+            ) : null;
           }}
         />
       </Animated.View>

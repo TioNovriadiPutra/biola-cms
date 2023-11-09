@@ -2,10 +2,22 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { colors } from "@themes/colors";
 import { fonts } from "@themes/fonts";
+import { useRecoilValue } from "recoil";
+import { navState } from "@store/navState";
 
-const DataItem = ({ item }) => {
+const DataItem = ({ item, fullData, detailFunc, detailScreen }) => {
+  const nav = useRecoilValue(navState);
+
+  const handlePress = () => {
+    const detailData = detailFunc(fullData, item[0]);
+
+    nav.navigate(detailScreen, {
+      data: detailData,
+    });
+  };
+
   return (
-    <Pressable style={styles.container}>
+    <Pressable style={styles.container} onPress={handlePress}>
       {item.map((item, index) => (
         <View style={styles.itemContainer} key={index.toString()}>
           <Text style={styles.item}>{item}</Text>

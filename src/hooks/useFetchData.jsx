@@ -2,9 +2,14 @@ import { useQuery } from "react-query";
 import { axiosInstance } from "@utils/config/axiosInstance";
 import { useRecoilValue } from "recoil";
 import { userTokenState } from "@store/authState";
+import { toastRefState } from "@store/toastState";
+import useAuth from "./useAuth";
 
 const useFetchData = (url, withToken) => {
   const userToken = useRecoilValue(userTokenState);
+  const toastRef = useRecoilValue(toastRefState);
+
+  const { logout } = useAuth();
 
   return useQuery(url, () =>
     axiosInstance
@@ -15,7 +20,14 @@ const useFetchData = (url, withToken) => {
       })
       .then((response) => response.data)
       .catch((error) => {
-        console.log(error);
+        if (error.response.state === 401) {
+          toastRef.current.show({
+            type: "info",
+            message: "Session timeout",
+          });
+        }
+
+        logout();
       })
   );
 };

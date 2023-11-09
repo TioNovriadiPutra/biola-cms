@@ -4,19 +4,25 @@ import MainContainer from "@containers/MainContainer";
 import Navbar from "@components/organisms/Navbar";
 import { homeNavbar } from "@utils/constant/navbar";
 import ScreenSlider from "@components/organisms/ScreenSlider";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { homeScreenState } from "@store/homeState";
 import useFetchData from "@hooks/useFetchData";
 import { ENDPOINT } from "@utils/config/endpoint";
 import LoadingScreen from "@components/modals/LoadingScreen";
+import { navState } from "@store/navState";
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const [sliderScreen, setSliderScreen] = useRecoilState(homeScreenState);
+  const setNav = useSetRecoilState(navState);
 
   const dataBatch = useFetchData(ENDPOINT.getAllBatches, false);
   const dataStudent = useFetchData(ENDPOINT.getAllStudents, true);
 
   const [activeScreen, setActiveScreen] = useState(0);
+
+  useEffect(() => {
+    setNav(navigation);
+  }, []);
 
   useEffect(() => {
     if (dataBatch.data && dataStudent.data) {
@@ -25,9 +31,13 @@ const Home = () => {
       const newData = oldData.map((item, index) => {
         return {
           head: item.head,
-          data: item.filtering(index === 0 ? dataStudent.data.data : dataBatch.data.data),
+          data: item.filtering(
+            index === 0 ? dataStudent.data.data : dataBatch.data.data
+          ),
           fullData: index === 0 ? dataStudent.data.data : dataBatch.data.data,
           filtering: item.filtering,
+          detail: item.detail,
+          detailScreen: item.detailScreen,
         };
       });
 
@@ -39,8 +49,18 @@ const Home = () => {
 
   return (
     <MainContainer style={styles.container}>
-      <Navbar listItem={homeNavbar} activeScreen={activeScreen} setActiveScreen={setActiveScreen} withExtraFunction />
-      <ScreenSlider screens={sliderScreen} setScreen={setSliderScreen} type="data" activeScreen={activeScreen} />
+      <Navbar
+        listItem={homeNavbar}
+        activeScreen={activeScreen}
+        setActiveScreen={setActiveScreen}
+        withExtraFunction
+      />
+      <ScreenSlider
+        screens={sliderScreen}
+        setScreen={setSliderScreen}
+        type="data"
+        activeScreen={activeScreen}
+      />
     </MainContainer>
   );
 };
